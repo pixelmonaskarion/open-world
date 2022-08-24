@@ -1,0 +1,18 @@
+
+        if self.camera.position.x >= 0.0 && self.camera.position.x < world_ref.size as f32 && self.camera.position.z >= 0.0 && self.camera.position.z < world_ref.size as f32 {
+            let sub_x = self.camera.position.x-((self.camera.position.x as i32) as f32);
+            let sub_z = self.camera.position.z-((self.camera.position.z as i32) as f32);
+            let height_here = world_ref.heights[(world_ref.size*self.camera.position.x as i32 + self.camera.position.z as i32) as usize];
+            let next_height_x1 = world_ref.heights[(world_ref.size*self.camera.position.x as i32 + self.camera.position.z as i32 + 1) as usize];
+            let next_height_z = world_ref.heights[(world_ref.size*(1+self.camera.position.x as i32) + self.camera.position.z as i32) as usize];
+            let next_height_x2 = world_ref.heights[(world_ref.size*(1+self.camera.position.x as i32) + self.camera.position.z as i32 + 1) as usize];
+            let height_delta_x1 = next_height_x1-height_here;
+            let height_delta_x2 = next_height_x2-next_height_z;
+            let exact_height_x1 = height_here+sub_x*height_delta_x1;
+            let exact_height_x2 = next_height_z+sub_x*height_delta_x2;
+            let exact_delta = exact_height_x2-exact_height_x1;
+            let height = exact_height_x1+sub_z*exact_delta;
+            return self.camera.position.y < height+1.0;
+        } else {
+            return false;
+        }
